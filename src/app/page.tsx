@@ -1,7 +1,6 @@
 "use client";
 import { Copy } from "lucide-react";
 import { Toaster, toast } from "sonner";
-import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -10,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 function copyFunction(value: string) {
   var copyText = document.getElementById(value + "Link");
   if (copyText) {
@@ -22,6 +22,14 @@ function copyFunction(value: string) {
 }
 
 function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
+  const[link, setLink] = useState("");
+  useEffect(() => {
+    if (value === "public") {
+      setLink("https://secure-exchange.netlify.app/encrypt?key=" + keyCode);
+    } else {
+      setLink("https://secure-exchange.netlify.app/decrypt?key=" + keyCode);
+    }
+  }, [value, keyCode]);
   return (
     <Card className="w-full max-w-md bg-white shadow-lg rounded-lg overflow-hidden dark:bg-blue-800 dark:border-amber-200">
       <CardHeader className="bg-gray-50 p-6 dark:bg-zinc-900">
@@ -40,10 +48,7 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
             id={`${value}Link`}
             className="text-sm text-gray-800 font-mono break-all dark:text-violet-200 overflow-hidden"
           >
-            https://secure-exchange.netlify.app/
-            {value === "public"
-              ? "encrypt?key=" + keyCode
-              : "decrypt?key=" + keyCode}
+            {link}
           </p>
           <Copy
             className="cursor-pointer text-gray-600 hover:text-gray-800 transition-colors dark:text-gray-300 dark:hover:text-gray-200 w-6 h-6 flex justify-center items-center min-w-6 min-h-6 p-1"
@@ -57,15 +62,15 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
 
 export default function Home() {
   let keys = "";
-  let lower = "abcdefghijklmnopqrstuvwxyz"
-  let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  let number = "0123456789"
+  let lower = "abcdefghijklmnopqrstuvwxyz";
+  let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let number = "0123456789";
   let characters = "";
   characters += lower;
   characters += upper;
   characters += number;
-  for(var i = 0; i < 32; i++){
-      keys += characters.charAt(Math.floor(Math.random() * characters.length));
+  for (var i = 0; i < 32; i++) {
+    keys += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return (
     <>
