@@ -40,7 +40,7 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
             id={`${value}Link`}
             className="text-sm text-gray-800 font-mono break-all dark:text-violet-200 overflow-hidden"
           >
-            {window.location.origin}/
+            https://secure-exchange.netlify.app/
             {value === "public"
               ? "encrypt?key=" + keyCode
               : "decrypt?key=" + keyCode}
