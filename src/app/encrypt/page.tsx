@@ -12,22 +12,13 @@ import { Copy } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 let publicKey = "";
 function copyFunction() {
-  const value = document.getElementById("encryptedBox");
+  const value = document.getElementById("encryptedBox") as HTMLTextAreaElement;
   if (value) {
     navigator.clipboard.writeText(value.textContent || "");
     toast.success("Encrypted text copied to clipboard");
   }
 }
 
-const encryptRsa = (publicKey: string, text: Buffer) => {
-  publicKey =
-    `-----BEGIN PUBLIC KEY-----` +
-    publicKey.replace(/~/g, "\n") +
-    `-----END PUBLIC KEY-----`;
-  const NodeRSA = require("node-rsa");
-  const key = new NodeRSA(publicKey);
-  return key.encrypt(text, "base64");
-};
 function encrypt() {
   if (publicKey === "") {
     toast.error("Please enter public key");
@@ -40,7 +31,9 @@ function encrypt() {
       toast.error("Please enter normal text");
       return;
     }
-    eBox.value = encryptRsa(publicKey, Buffer.from(value.value));
+    var CryptoJS = require("crypto-js");  
+    let cypher = CryptoJS.AES.encrypt(value.value, publicKey);
+    eBox.innerHTML = cypher.toString();
     eView?.classList.remove("hidden");
   }
 }

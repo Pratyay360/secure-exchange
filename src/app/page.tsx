@@ -26,7 +26,7 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
     <Card className="w-full max-w-md bg-white shadow-lg rounded-lg overflow-hidden dark:bg-blue-800 dark:border-amber-200">
       <CardHeader className="bg-gray-50 p-6 dark:bg-zinc-900">
         <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-          {value === "public" ? "Public Key" : "Private Key"}
+          {value === "public" ? "Encrypt" : "Decrypt"}
         </CardTitle>
         <CardDescription className="text-gray-600 mt-2 dark:text-white">
           {value === "public"
@@ -40,7 +40,7 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
             id={`${value}Link`}
             className="text-sm text-gray-800 font-mono break-all dark:text-violet-200 overflow-hidden"
           >
-            http://localhost:3000/
+            {window.location.origin}/
             {value === "public"
               ? "encrypt?key=" + keyCode
               : "decrypt?key=" + keyCode}
@@ -57,20 +57,16 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
 
 export default function Home() {
   let dpublicKey = "";
-  let dprivateKey = "";
-  const [publicKey, setPublicKey] = useState("");
-  const [privateKey, setPrivateKey] = useState("");
-  const NodeRSA = require("node-rsa");
-  useEffect(() => {
-    const generateKey = async () => {
-      const key = new NodeRSA({ b: 512 });
-      setPublicKey(key.exportKey('public'));
-      setPrivateKey(key.exportKey('private'));
-    };
-    generateKey();
-  }, []);
-  dpublicKey = publicKey.replace(/-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----/g, '').replace(/\n/g, '~');
-  dprivateKey = privateKey.replace(/-----BEGIN RSA PRIVATE KEY-----|-----END RSA PRIVATE KEY-----/g, '').replace(/\n/g, '~');
+  let lower = "abcdefghijklmnopqrstuvwxyz"
+  let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  let number = "0123456789"
+  let characters = "";
+  characters += lower;
+  characters += upper;
+  characters += number;
+  for(var i = 0; i < 32; i++){
+      dpublicKey += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12 px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-700 ">
@@ -80,7 +76,7 @@ export default function Home() {
           </h1>
           <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8">
             <CustomCard value="public" keyCode={dpublicKey} />
-            <CustomCard value="private" keyCode={dprivateKey} />
+            <CustomCard value="private" keyCode={dpublicKey} />
           </div>
         </div>
         <Toaster richColors closeButton position="bottom-right" expand={true} />

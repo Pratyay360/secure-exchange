@@ -20,15 +20,6 @@ function copyFunction() {
     toast.success("Decrypted text copied to clipboard");
   }
 }
-const decryptRsa = (privateKey: string, text: string) => {
-  privateKey =
-    `-----BEGIN RSA PRIVATE KEY-----` +
-    privateKey.replace(/~/g, "\n") +
-    `-----END RSA PRIVATE KEY-----`;
-  const NodeRSA = require("node-rsa");
-  const key = new NodeRSA(privateKey);
-  return key.decrypt(text, "utf8");
-};
 function decrypt() {
   if (privateKey === "") {
     toast.error("Please enter private key");
@@ -37,11 +28,9 @@ function decrypt() {
     const value = document.getElementById("encryptBox") as HTMLTextAreaElement;
     const dView = document.getElementById("dView");
     const dBox = document.getElementById("decryptedBox") as HTMLTextAreaElement;
-    if (value.value === "") {
-      toast.error("Please enter encrypted text");
-      return;
-    }
-    dBox.value = decryptRsa(privateKey, value.value);
+    var CryptoJS = require("crypto-js");
+    let decrypted = CryptoJS.AES.decrypt(value.value, privateKey);    
+    dBox.innerHTML = decrypted.toString(CryptoJS.enc.Utf8);
     dView?.classList.remove("hidden");
   }
 }
