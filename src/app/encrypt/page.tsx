@@ -19,8 +19,14 @@ function copyFunction() {
   }
 }
 
-const encryptRsa = (publicKey: string, text: string) => {
-  return text;
+const encryptRsa = (publicKey: string, text: Buffer) => {
+  publicKey =
+    `-----BEGIN PUBLIC KEY-----` +
+    publicKey.replace(/~/g, "\n") +
+    `-----END PUBLIC KEY-----`;
+  const NodeRSA = require("node-rsa");
+  const key = new NodeRSA(publicKey);
+  return key.encrypt(text, "base64");
 };
 function encrypt() {
   if (publicKey === "") {
@@ -34,7 +40,7 @@ function encrypt() {
       toast.error("Please enter normal text");
       return;
     }
-    eBox.value = encryptRsa(publicKey, value.value);
+    eBox.value = encryptRsa(publicKey, Buffer.from(value.value));
     eView?.classList.remove("hidden");
   }
 }
@@ -58,7 +64,7 @@ export default function Home() {
             <CardContent className="p-6 space-y-4">
               <textarea
                 className="w-full h-24 p-2 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Enter encrypted text here"
+                placeholder="Enter normal text here"
                 id="excryptBox"
               />
               <Button className="w-full" onClick={encrypt}>

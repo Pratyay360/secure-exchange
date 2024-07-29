@@ -21,7 +21,7 @@ function copyFunction(value: string) {
   }
 }
 
-function CustomCard({ value, key }: { value: string; key: string }) {
+function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
   return (
     <Card className="w-full max-w-md bg-white shadow-lg rounded-lg overflow-hidden dark:bg-blue-800 dark:border-amber-200">
       <CardHeader className="bg-gray-50 p-6 dark:bg-zinc-900">
@@ -41,10 +41,12 @@ function CustomCard({ value, key }: { value: string; key: string }) {
             className="text-sm text-gray-800 font-mono break-all dark:text-violet-200 overflow-hidden"
           >
             http://localhost:3000/
-            {value === "public" ? "encrypt?key=" + key : "decrypt?key=" + key}
+            {value === "public"
+              ? "encrypt?key=" + keyCode
+              : "decrypt?key=" + keyCode}
           </p>
           <Copy
-            className="cursor-pointer text-gray-600 hover:text-gray-800 transition-colors dark:text-gray-300 dark:hover:text-gray-200"
+            className="cursor-pointer text-gray-600 hover:text-gray-800 transition-colors dark:text-gray-300 dark:hover:text-gray-200 w-6 h-6 flex justify-center items-center min-w-6 min-h-6 p-1"
             onClick={() => copyFunction(value)}
           />
         </div>
@@ -54,9 +56,21 @@ function CustomCard({ value, key }: { value: string; key: string }) {
 }
 
 export default function Home() {
-  let publicKey = "";
-  let privateKey = "";
-   
+  let dpublicKey = "";
+  let dprivateKey = "";
+  const [publicKey, setPublicKey] = useState("");
+  const [privateKey, setPrivateKey] = useState("");
+  const NodeRSA = require("node-rsa");
+  useEffect(() => {
+    const generateKey = async () => {
+      const key = new NodeRSA({ b: 512 });
+      setPublicKey(key.exportKey('public'));
+      setPrivateKey(key.exportKey('private'));
+    };
+    generateKey();
+  }, []);
+  dpublicKey = publicKey.replace(/-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----/g, '').replace(/\n/g, '~');
+  dprivateKey = privateKey.replace(/-----BEGIN RSA PRIVATE KEY-----|-----END RSA PRIVATE KEY-----/g, '').replace(/\n/g, '~');
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12 px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-700 ">
@@ -65,8 +79,8 @@ export default function Home() {
             Encryption Key Management
           </h1>
           <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8">
-            <CustomCard value="public" key={publicKey} />
-            <CustomCard value="private" key={privateKey} />
+            <CustomCard value="public" keyCode={dpublicKey} />
+            <CustomCard value="private" keyCode={dprivateKey} />
           </div>
         </div>
         <Toaster richColors closeButton position="bottom-right" expand={true} />
