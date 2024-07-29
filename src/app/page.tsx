@@ -56,7 +56,7 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
 }
 
 export default function Home() {
-  let dpublicKey = "";
+  let keys = "";
   let lower = "abcdefghijklmnopqrstuvwxyz"
   let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   let number = "0123456789"
@@ -65,7 +65,7 @@ export default function Home() {
   characters += upper;
   characters += number;
   for(var i = 0; i < 32; i++){
-      dpublicKey += characters.charAt(Math.floor(Math.random() * characters.length));
+      keys += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return (
     <>
@@ -75,8 +75,8 @@ export default function Home() {
             Encryption Key Management
           </h1>
           <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8">
-            <CustomCard value="public" keyCode={dpublicKey} />
-            <CustomCard value="private" keyCode={dpublicKey} />
+            <CustomCard value="public" keyCode={keys} />
+            <CustomCard value="private" keyCode={keys} />
           </div>
         </div>
         <Toaster richColors closeButton position="bottom-right" expand={true} />
