@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useEffect, useState } from "react";
+
 function copyFunction(value: string) {
   var copyText = document.getElementById(value + "Link");
   if (copyText) {
@@ -22,7 +23,7 @@ function copyFunction(value: string) {
 }
 
 function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
-  const[link, setLink] = useState("");
+  const [link, setLink] = useState("");
   useEffect(() => {
     if (value === "public") {
       setLink("https://secure-exchange.netlify.app/encrypt?key=" + keyCode);
@@ -61,31 +62,50 @@ function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
 }
 
 export default function Home() {
-  let keys = "";
-  let lower = "abcdefghijklmnopqrstuvwxyz";
-  let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let number = "0123456789";
-  let characters = "";
-  characters += lower;
-  characters += upper;
-  characters += number;
-  for (var i = 0; i < 32; i++) {
-    keys += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
+  const [length, setLength] = useState(1);
+  const [keys, setKeys] = useState("");
+
+  const generateKeys = (len: number) => {
+    let lower = "abcdefghijklmnopqrstuvwxyz";
+    let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let number = "0123456789";
+    let characters = lower + upper + number;
+    let generatedKeys = "";
+
+    for (let i = 0; i < len; i++) {
+      generatedKeys += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return generatedKeys;
+  };
+
+  useEffect(() => {
+    setKeys(generateKeys(length));
+  }, [length]);
+
   return (
-    <>
-      <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12 px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-700 ">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-center text-gray-900 mb-12 dark:text-white">
-            Encryption Key Management
-          </h1>
-          <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8">
-            <CustomCard value="public" keyCode={keys} />
-            <CustomCard value="private" keyCode={keys} />
-          </div>
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12 px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-700">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold text-center text-gray-900 mb-12 dark:text-white">
+          Encryption Key Management
+        </h1>
+        <div className="flex justify-center mb-4">
+          <p id="outputs" className="mr-4">{length}</p>
+          <input
+            type="range"
+            id="length"
+            value={length}
+            min="1"
+            max="256"
+            className="slider"
+            onChange={(e) => setLength(parseInt(e.target.value))}
+          />
         </div>
-        <Toaster richColors closeButton position="bottom-right" expand={true} />
+        <div className="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-8">
+          <CustomCard value="public" keyCode={keys} />
+          <CustomCard value="private" keyCode={keys} />
+        </div>
       </div>
-    </>
+      <Toaster richColors closeButton position="bottom-right" expand={true} />
+    </div>
   );
 }
