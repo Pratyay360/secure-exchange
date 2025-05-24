@@ -1,5 +1,5 @@
 const NodeRSA = require("node-rsa");
-const key = new NodeRSA({ b: 512 });
+const key = new NodeRSA({ b: 2048 });
 console.log('public :'+key.exportKey('public'))
 console.log('private: '+key.exportKey('private'))      
 let a = key.exportKey('public').replace(/-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----/g, '').replace(/\n/g, '~')
