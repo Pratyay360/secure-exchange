@@ -65,6 +65,14 @@ export default function Home() {
   const [length, setLength] = useState(1);
   const [keys, setKeys] = useState("");
 
+  // Only generate keys on the client to avoid hydration mismatch
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setKeys(generateKeys(length));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [length]);
+
   const generateKeys = (len: number) => {
     let lower = "abcdefghijklmnopqrstuvwxyz";
     let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -77,10 +85,6 @@ export default function Home() {
     }
     return generatedKeys;
   };
-
-  useEffect(() => {
-    setKeys(generateKeys(length));
-  }, [length]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12 px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-700">
