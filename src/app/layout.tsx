@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import DockNav from "@/components/DockNav";
+import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
 
 const inter = Inter({ 
@@ -37,15 +37,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased bg-background text-foreground`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <DockNav />
-          <main className="min-h-screen">
+          <Navbar />
+          <main className="min-h-[calc(100vh-4rem)]">
             {children}
           </main>
           <Toaster richColors closeButton position="bottom-right" expand={true} />

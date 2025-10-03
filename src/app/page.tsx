@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { Shield, Key, Lock, Unlock, Sparkles } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Home - Secure Encryption Platform",
@@ -8,21 +10,21 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Hero Section */}
         <div className="text-center mb-16 space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-sm font-medium text-blue-700 dark:text-blue-300 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4 bg-primary/10 text-primary dark:text-primary-foreground">
             <Sparkles className="w-4 h-4" />
             Military-Grade Encryption
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground">
             Secure Encryption
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+            <span className="block bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent mt-2">
               Platform
             </span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Choose your preferred encryption method for secure, private communication
           </p>
         </div>
@@ -30,108 +32,125 @@ export default function Home() {
         {/* Encryption Methods Grid */}
         <div className="grid md:grid-cols-3 gap-8 mb-20">
           {/* AES Card */}
-          <div className="group relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-300"></div>
-            <div className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-                  <Key className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <Card className="flex flex-col border-0 shadow-lg bg-card dark:bg-card rounded-2xl p-0 overflow-hidden group hover:shadow-xl transition-all duration-300 h-full">
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <Key className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  AES Encryption
-                </h2>
+                <div>
+                  <CardTitle className="text-2xl font-bold">AES Encryption</CardTitle>
+                  <CardDescription className="text-white/80 mt-1">
+                    Symmetric encryption with shared keys
+                  </CardDescription>
+                </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg">
-                Symmetric encryption using Advanced Encryption Standard with shared keys
+            </CardHeader>
+            <CardContent className="p-6 flex-grow">
+              <p className="text-muted-foreground mb-4">
+                Advanced Encryption Standard with 256-bit strength
               </p>
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Lock className="w-4 h-4" />
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Lock className="w-4 h-4 text-primary" />
                   <span>256-bit encryption strength</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Unlock className="w-4 h-4" />
+                </li>
+                <li className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Unlock className="w-4 h-4 text-primary" />
                   <span>Fast encryption & decryption</span>
-                </div>
-              </div>
-              <a 
-                href="/aes-keys"
-                className="inline-block w-full text-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="p-6 pt-0">
+              <Button 
+                asChild
+                className="w-full bg-primary hover:bg-primary/90 text-white"
               >
-                Get Started with AES
-              </a>
-            </div>
-          </div>
+                <a href="/aes-keys">Get Started with AES</a>
+              </Button>
+            </CardFooter>
+          </Card>
 
           {/* ECC Card */}
-          <div className="group relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-green-600 to-emerald-400 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-300"></div>
-            <div className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                  <Shield className="w-8 h-8 text-green-600 dark:text-green-400" />
+          <Card className="flex flex-col border-0 shadow-lg bg-card dark:bg-card rounded-2xl p-0 overflow-hidden group hover:shadow-xl transition-all duration-300 h-full">
+            <CardHeader className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <Shield className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  ECC Encryption
-                </h2>
+                <div>
+                  <CardTitle className="text-2xl font-bold">ECC Encryption</CardTitle>
+                  <CardDescription className="text-white/80 mt-1">
+                    Elliptic Curve Cryptography with smaller keys
+                  </CardDescription>
+                </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg">
-                Elliptic Curve Cryptography for strong security with smaller key sizes
+            </CardHeader>
+            <CardContent className="p-6 flex-grow">
+              <p className="text-muted-foreground mb-4">
+                Strong security with smaller key sizes
               </p>
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Shield className="w-4 h-4" />
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Shield className="w-4 h-4 text-primary" />
                   <span>P-256 curve standard</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Key className="w-4 h-4" />
+                </li>
+                <li className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Key className="w-4 h-4 text-primary" />
                   <span>Public/private key pairs</span>
-                </div>
-              </div>
-              <a 
-                href="/ecc-keys"
-                className="inline-block w-full text-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="p-6 pt-0">
+              <Button 
+                asChild
+                className="w-full bg-primary hover:bg-primary/90 text-white"
               >
-                Get Started with ECC
-              </a>
-            </div>
-          </div>
+                <a href="/ecc-keys">Get Started with ECC</a>
+              </Button>
+            </CardFooter>
+          </Card>
 
           {/* RSA Card */}
-          <div className="group relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-amber-400 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-300"></div>
-            <div className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-xl">
-                  <Lock className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+          <Card className="flex flex-col border-0 shadow-lg bg-card dark:bg-card rounded-2xl p-0 overflow-hidden group hover:shadow-xl transition-all duration-300 h-full">
+            <CardHeader className="bg-gradient-to-r from-orange-500 to-amber-600 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <Lock className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  RSA Encryption
-                </h2>
+                <div>
+                  <CardTitle className="text-2xl font-bold">RSA Encryption</CardTitle>
+                  <CardDescription className="text-white/80 mt-1">
+                    Industry-standard asymmetric encryption
+                  </CardDescription>
+                </div>
               </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg">
-                Industry-standard asymmetric encryption with 2048-bit keys
+            </CardHeader>
+            <CardContent className="p-6 flex-grow">
+              <p className="text-muted-foreground mb-4">
+                2048-bit keys for maximum security
               </p>
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Lock className="w-4 h-4" />
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Lock className="w-4 h-4 text-primary" />
                   <span>2048-bit key strength</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Key className="w-4 h-4" />
+                </li>
+                <li className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Key className="w-4 h-4 text-primary" />
                   <span>Public/private key pairs</span>
-                </div>
-              </div>
-              <a 
-                href="/rsa-keys"
-                className="inline-block w-full text-center px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition-colors"
+                </li>
+              </ul>
+            </CardContent>
+            <CardFooter className="p-6 pt-0">
+              <Button 
+                asChild
+                className="w-full bg-primary hover:bg-primary/90 text-white"
               >
-                Get Started with RSA
-              </a>
-            </div>
-          </div>
+                <a href="/rsa-keys">Get Started with RSA</a>
+              </Button>
+            </CardFooter>
+          </Card>
         </div>
-
       </div>
     </div>
   );
