@@ -4,7 +4,7 @@ import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { DockIcon } from "@/components/magicui/dock";
 import Link from "next/link";
-import { BookOpen, CirclePlus } from "lucide-react";
+import { BookOpen, CirclePlus, Shield, Key, Lock, Unlock } from "lucide-react";
 export default function DockNav() {
   const { theme, setTheme } = useTheme();
   const toggleTheme = () => {
@@ -19,6 +19,31 @@ export default function DockNav() {
               <CirclePlus size={24} />
             </Link>
           </DockIcon>
+          
+          {/* AES Encryption Options */}
+          <DockIcon className="bg-blue-100 dark:bg-blue-900/30 p-3">
+            <Link href="/encrypt">
+              <Lock size={24} className="text-blue-600" />
+            </Link>
+          </DockIcon>
+          <DockIcon className="bg-blue-100 dark:bg-blue-900/30 p-3">
+            <Link href="/decrypt">
+              <Unlock size={24} className="text-blue-600" />
+            </Link>
+          </DockIcon>
+          
+          {/* ECC Encryption Options */}
+          <DockIcon className="bg-green-100 dark:bg-green-900/30 p-3">
+            <Link href="/ecc-keys">
+              <Shield size={24} className="text-green-600" />
+            </Link>
+          </DockIcon>
+          <DockIcon className="bg-green-100 dark:bg-green-900/30 p-3">
+            <Link href="/ecc-encrypt">
+              <Key size={24} className="text-green-600" />
+            </Link>
+          </DockIcon>
+          
           <DockIcon className="bg-black/10 dark:bg-white/10 p-3">
             <Link href="/about">
               <BookOpen size={24} />
