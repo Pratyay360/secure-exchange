@@ -1,101 +1,35 @@
-"use client";
-import { Toaster, toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Copy } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { encryptWithECC } from "@/utils/ecc-crypto";
+import { Metadata } from "next";
+import { Suspense } from "react";
+import ECCEncryptClient from "./ECCEncryptClient";
 
-let publicKey = "";
+export const metadata: Metadata = {
+  title: "ECC Encryption",
+  description: "Encrypt messages using Elliptic Curve Cryptography",
+};
 
-function copyFunction() {
-  const value = document.getElementById("encryptedBox") as HTMLTextAreaElement;
-  if (value) {
-    navigator.clipboard.writeText(value.textContent || "");
-    toast.success("Encrypted text copied to clipboard");
-  }
-}
-
-async function encryptECC() {
-  if (publicKey === "") {
-    toast.error("Please enter ECC public key");
-    return;
-  }
-  
-  const value = document.getElementById("eccEncryptBox") as HTMLTextAreaElement;
-  const eView = document.getElementById("eView");
-  const eBox = document.getElementById("encryptedBox") as HTMLTextAreaElement;
-  
-  if (value.value === "") {
-    toast.error("Please enter normal text");
-    return;
-  }
-
-  try {
-    const encryptedBase64 = await encryptWithECC(value.value, publicKey);
-    eBox.innerHTML = encryptedBase64;
-    eView?.classList.remove("hidden");
-  } catch (error) {
-    console.error('ECC Encryption error:', error);
-    toast.error("Encryption failed. Please check your public key format.");
-  }
-}
-
-export default function ECCEncrypt() {
-  const searchParams = useSearchParams();
-  publicKey = searchParams.get("key") || "";
-
+export default function ECCEncryptPage() {
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-100 to-white py-12 px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-700">
-        <Toaster richColors closeButton position="bottom-right" expand={true} />
-        <div className="w-full max-w-md">
-          <Card className="bg-white shadow-lg rounded-lg overflow-hidden dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader className="bg-green-50 p-6 dark:bg-gray-900">
-              <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                ECC Encryption
-              </CardTitle>
-              <CardDescription className="text-gray-600 mt-2 dark:text-gray-400">
-                Enter normal text to encrypt using Elliptic Curve Cryptography
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6 space-y-4">
-              <textarea
-                className="w-full h-24 p-2 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"
-                placeholder="Enter normal text here"
-                id="eccEncryptBox"
-              />
-              <Button className="w-full bg-green-600 hover:bg-green-700" onClick={encryptECC}>
-                Encrypt with ECC
-              </Button>
-              <div id="eView" className="hidden space-y-4">
-                <textarea
-                  id="encryptedBox"
-                  className="w-full h-24 p-2 border border-gray-300 rounded-md resize-none bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                  readOnly
-                />
-                <div className="flex justify-end">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-                    onClick={copyFunction}
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copy
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+    <Suspense fallback={<ECCEncryptSkeleton />}>
+      <ECCEncryptClient />
+    </Suspense>
+  );
+}
+
+function ECCEncryptSkeleton() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-950 dark:via-gray-900 dark:to-green-950 py-12 px-4">
+      <div className="w-full max-w-2xl">
+        <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 animate-pulse">
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-8">
+            <div className="h-8 bg-green-400 rounded w-1/3 mb-2"></div>
+            <div className="h-4 bg-green-400 rounded w-2/3"></div>
+          </div>
+          <div className="p-8 space-y-6">
+            <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

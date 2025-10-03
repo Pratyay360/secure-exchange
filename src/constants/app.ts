@@ -27,15 +27,30 @@ export const ENCRYPTION_CONFIG = {
 
 export const ROUTES = {
   home: '/',
+  aesKeys: '/aes-keys',
   encrypt: '/encrypt',
   decrypt: '/decrypt',
   eccKeys: '/ecc-keys',
   eccEncrypt: '/ecc-encrypt',
   eccDecrypt: '/ecc-decrypt',
+  rsaKeys: '/rsa-keys',
+  rsaEncrypt: '/rsa-encrypt',
+  rsaDecrypt: '/rsa-decrypt',
   about: '/about',
+  aes: {
+    keys: '/aes-keys',
+    encrypt: '/encrypt',
+    decrypt: '/decrypt'
+  },
   ecc: {
+    keys: '/ecc-keys',
     encrypt: '/ecc-encrypt',
     decrypt: '/ecc-decrypt'
+  },
+  rsa: {
+    keys: '/rsa-keys',
+    encrypt: '/rsa-encrypt',
+    decrypt: '/rsa-decrypt'
   }
 } as const;
 
