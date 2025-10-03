@@ -1,6 +1,7 @@
 /**
  * ECC Cryptography utilities using iso-crypto
  * Implements ECIES (Elliptic Curve Integrated Encryption Scheme)
+ * Uses P-256 curve with AES-256-CTR encryption
  */
 
 import { 
@@ -11,7 +12,7 @@ import {
     encode,
     decode
 } from 'iso-crypto';
-import { safeJsonParse, isValidBase64 } from "@/utils/crypto-helpers";
+import { safeJsonParse, isValidBase64 } from '@/utils/crypto-helpers';
 
 export interface ECCKeyPair {
     publicKey: string;
@@ -22,8 +23,18 @@ export interface EncryptedData {
     encrypted: string;
     iv: string;
     senderPublicKey: string;
-    version: string; // For future compatibility
+    version: string;
 }
+
+const ECC_CONFIG = {
+    curve: 'p256' as const,
+    encryption: {
+        cipher: 'AES' as const,
+        size: 256,
+        mode: 'CTR' as const
+    },
+    version: '2.0'
+} as const;
 
 /**
  * Generate an ECC key pair using P-256 curve
@@ -32,22 +43,16 @@ export interface EncryptedData {
  */
 export async function generateECCKeyPair(): Promise<ECCKeyPair> {
     try {
-        // Generate private key using iso-crypto
-        const privateKeyBytes = await generateEccPrivateKey('p256');
-        
-        // Generate corresponding public key
-        const publicKeyBytes = generateEccPublicKey(privateKeyBytes, 'p256');
+        const privateKeyBytes = await generateEccPrivateKey(ECC_CONFIG.curve);
+        const publicKeyBytes = generateEccPublicKey(privateKeyBytes, ECC_CONFIG.curve);
 
-        // Encode keys as base64 for storage/transmission
         const privateKey = encode(privateKeyBytes, 'base64');
         const publicKey = encode(publicKeyBytes, 'base64');
 
-        return {
-            publicKey,
-            privateKey
-        };
+        return { publicKey, privateKey };
     } catch (error) {
-        throw new Error(`Failed to generate ECC key pair: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        throw new Error(`Failed to generate ECC key pair: ${message}`);
     }
 }
 
@@ -68,37 +73,29 @@ export async function encryptWithECC(message: string, publicKeyBase64: string): 
     }
 
     try {
-        // Generate a temporary private key for the sender
-        const senderPrivateKey = await generateEccPrivateKey('p256');
-        
-        // Decode the receiver's public key from base64
+        const senderPrivateKey = await generateEccPrivateKey(ECC_CONFIG.curve);
         const receiverPublicKey = decode({ text: publicKeyBase64, encoding: 'base64' });
 
-        // Encrypt the message using iso-crypto
         const result = await eccEncrypt({
             data: message,
             privateKey: senderPrivateKey,
             publicKey: receiverPublicKey
         }, {
-            curve: 'p256',
-            encryption: {
-                cipher: 'AES',
-                size: 256,
-                mode: 'CTR'
-            }
+            curve: ECC_CONFIG.curve,
+            encryption: ECC_CONFIG.encryption
         });
 
-        // Encode the result for transmission
         const encryptedData: EncryptedData = {
             encrypted: encode(result.encrypted, 'base64'),
             iv: encode(result.iv, 'base64'),
             senderPublicKey: encode(result.publicKey, 'base64'),
-            version: '2.0'
+            version: ECC_CONFIG.version
         };
 
         return btoa(JSON.stringify(encryptedData));
     } catch (error) {
-        throw new Error(`ECC encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        throw new Error(`ECC encryption failed: ${message}`);
     }
 }
 
@@ -115,36 +112,29 @@ export async function decryptWithECC(encryptedBase64: string, privateKeyBase64: 
     }
 
     try {
-        // Parse encrypted data
         const encryptedData = safeJsonParse<EncryptedData>(atob(encryptedBase64));
         if (!encryptedData) {
             throw new Error('Invalid encrypted data format');
         }
 
-        // Decode the components
         const encrypted = decode({ text: encryptedData.encrypted, encoding: 'base64' });
         const iv = decode({ text: encryptedData.iv, encoding: 'base64' });
         const senderPublicKey = decode({ text: encryptedData.senderPublicKey, encoding: 'base64' });
         const receiverPrivateKey = decode({ text: privateKeyBase64, encoding: 'base64' });
 
-        // Decrypt using iso-crypto
         const decryptedBytes = await eccDecrypt({
             encrypted,
             iv,
             publicKey: senderPublicKey,
             privateKey: receiverPrivateKey
         }, {
-            curve: 'p256',
-            encryption: {
-                cipher: 'AES',
-                size: 256,
-                mode: 'CTR'
-            }
+            curve: ECC_CONFIG.curve,
+            encryption: ECC_CONFIG.encryption
         });
 
-        // Convert bytes to string
         return new TextDecoder().decode(decryptedBytes);
     } catch (error) {
-        throw new Error(`ECC decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        throw new Error(`ECC decryption failed: ${message}`);
     }
 }

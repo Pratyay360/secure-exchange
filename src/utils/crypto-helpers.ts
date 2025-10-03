@@ -1,9 +1,18 @@
 /**
- * Crypto helper utilities
+ * Crypto helper utilities for key validation, formatting, and URL handling
  */
 
+type KeyType = 'rsa' | 'ecc';
+
+interface JWKKey {
+  kty: string;
+  crv?: string;
+}
+
 /**
- * Safely parse JSON string
+ * Safely parse JSON string with type safety
+ * @param jsonString - JSON string to parse
+ * @returns Parsed object or null if parsing fails
  */
 export function safeJsonParse<T>(jsonString: string): T | null {
   try {
@@ -14,9 +23,13 @@ export function safeJsonParse<T>(jsonString: string): T | null {
 }
 
 /**
- * Check if string is valid base64
+ * Validate if a string is valid base64 encoded
+ * @param str - String to validate
+ * @returns true if valid base64, false otherwise
  */
 export function isValidBase64(str: string): boolean {
+  if (!str || typeof str !== 'string') return false;
+  
   try {
     return btoa(atob(str)) === str;
   } catch {
@@ -25,14 +38,19 @@ export function isValidBase64(str: string): boolean {
 }
 
 /**
- * Generate shareable link for keys
+ * Generate a shareable link with encoded key parameter
+ * @param baseUrl - Base URL of the application
+ * @param endpoint - Endpoint path (e.g., '/encrypt')
+ * @param publicKey - Public key to encode in URL
+ * @returns Complete shareable URL
  */
 export function generateShareableLink(baseUrl: string, endpoint: string, publicKey: string): string {
   return `${baseUrl}${endpoint}?key=${encodeURIComponent(publicKey)}`;
 }
 
 /**
- * Extract key from URL parameters
+ * Extract key parameter from current URL
+ * @returns Key string or null if not found or not in browser
  */
 export function extractKeyFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
@@ -42,29 +60,34 @@ export function extractKeyFromUrl(): string | null {
 }
 
 /**
- * Validate key format based on type
+ * Validate cryptographic key format based on type
+ * @param key - Base64 encoded key to validate
+ * @param type - Type of key ('rsa' or 'ecc')
+ * @returns true if key format is valid for the specified type
  */
-export function validateKeyFormat(key: string, type: 'rsa' | 'ecc'): boolean {
+export function validateKeyFormat(key: string, type: KeyType): boolean {
   if (!key || !isValidBase64(key)) return false;
   
   try {
-    const parsed = safeJsonParse<any>(atob(key));
+    const parsed = safeJsonParse<JWKKey>(atob(key));
     if (!parsed || typeof parsed !== 'object') return false;
     
     if (type === 'ecc') {
       return parsed.kty === 'EC' && parsed.crv === 'P-256';
-    } else {
-      return parsed.kty === 'RSA';
     }
+    return parsed.kty === 'RSA';
   } catch {
     return false;
   }
 }
 
 /**
- * Format key for display (truncate long keys)
+ * Format long keys for display by truncating
+ * @param key - Key string to format
+ * @param maxLength - Maximum length before truncation (default: 50)
+ * @returns Formatted key string
  */
-export function formatKeyForDisplay(key: string, maxLength: number = 50): string {
+export function formatKeyForDisplay(key: string, maxLength = 50): string {
   if (key.length <= maxLength) return key;
   return `${key.substring(0, maxLength)}...`;
 }

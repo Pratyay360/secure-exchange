@@ -6,6 +6,19 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { encrypt as aesEncrypt, decrypt as aesDecrypt, encode } from 'iso-crypto';
 
+interface EncryptedData {
+  encrypted: string;
+  iv: string;
+  version: string;
+}
+
+const ENCRYPTION_CONFIG = {
+  cipher: 'AES' as const,
+  size: 256,
+  mode: 'CTR' as const,
+  version: '1.0'
+};
+
 export function useAESEncryption() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,30 +35,29 @@ export function useAESEncryption() {
 
     setIsLoading(true);
     try {
-      // Use iso-crypto for AES encryption
       const result = await aesEncrypt({
         data: message,
         secret: key
       }, {
         encryption: {
-          cipher: 'AES',
-          size: 256,
-          mode: 'CTR'
+          cipher: ENCRYPTION_CONFIG.cipher,
+          size: ENCRYPTION_CONFIG.size,
+          mode: ENCRYPTION_CONFIG.mode
         }
       });
 
-      // Encode the result as base64 for transmission
-      const encryptedData = {
+      const encryptedData: EncryptedData = {
         encrypted: encode(result.encrypted, 'base64'),
         iv: encode(result.iv, 'base64'),
-        version: '1.0'
+        version: ENCRYPTION_CONFIG.version
       };
 
       const encryptedBase64 = btoa(JSON.stringify(encryptedData));
       toast.success('Message encrypted successfully!');
       return encryptedBase64;
     } catch (error) {
-      console.error('Encryption error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Encryption error:', errorMessage);
       toast.error('Encryption failed. Please check your inputs.');
       return null;
     } finally {
@@ -66,19 +78,17 @@ export function useAESEncryption() {
 
     setIsLoading(true);
     try {
-      // Parse the encrypted data
-      const encryptedData = JSON.parse(atob(encryptedMessage));
+      const encryptedData: EncryptedData = JSON.parse(atob(encryptedMessage));
 
-      // Use iso-crypto for AES decryption
       const decryptedBytes = await aesDecrypt({
         encrypted: { text: encryptedData.encrypted, encoding: 'base64' },
         iv: { text: encryptedData.iv, encoding: 'base64' },
         secret: key
       }, {
         encryption: {
-          cipher: 'AES',
-          size: 256,
-          mode: 'CTR'
+          cipher: ENCRYPTION_CONFIG.cipher,
+          size: ENCRYPTION_CONFIG.size,
+          mode: ENCRYPTION_CONFIG.mode
         }
       });
 
@@ -86,7 +96,8 @@ export function useAESEncryption() {
       toast.success('Message decrypted successfully!');
       return decryptedText;
     } catch (error) {
-      console.error('Decryption error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Decryption error:', errorMessage);
       toast.error('Decryption failed. Please check your inputs.');
       return null;
     } finally {

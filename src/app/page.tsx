@@ -14,24 +14,21 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 function copyFunction(value: string) {
-  var copyText = document.getElementById(value + "Link");
-  if (copyText) {
-    const textContent = copyText.textContent;
-    if (textContent) {
-      navigator.clipboard.writeText(textContent);
-      toast.success(value + " link copied to clipboard");
-    }
+  const copyText = document.getElementById(value + "Link");
+  if (copyText?.textContent) {
+    navigator.clipboard.writeText(copyText.textContent);
+    toast.success(`${value} link copied to clipboard`);
   }
 }
 
+const BASE_URL = "https://secure-exchange.netlify.app";
+
 function CustomCard({ value, keyCode }: { value: string; keyCode: string }) {
   const [link, setLink] = useState("");
+  
   useEffect(() => {
-    if (value === "public") {
-      setLink("https://secure-exchange.netlify.app/encrypt?key=" + keyCode);
-    } else {
-      setLink("https://secure-exchange.netlify.app/decrypt?key=" + keyCode);
-    }
+    const endpoint = value === "public" ? "/encrypt" : "/decrypt";
+    setLink(`${BASE_URL}${endpoint}?key=${keyCode}`);
   }, [value, keyCode]);
   return (
     <Card className="w-full max-w-md bg-white shadow-lg rounded-lg overflow-hidden dark:bg-blue-800 dark:border-amber-200">
@@ -94,8 +91,18 @@ function CryptoMethodCard({ title, description, icon, href, color }: {
   );
 }
 
+const CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const MIN_KEY_LENGTH = 1;
+const MAX_KEY_LENGTH = 256;
+
+function generateKeys(length: number): string {
+  return Array.from({ length }, () => 
+    CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length))
+  ).join("");
+}
+
 export default function Home() {
-  const [length, setLength] = useState(1);
+  const [length, setLength] = useState(MIN_KEY_LENGTH);
   const [keys, setKeys] = useState("");
 
   // Only generate keys on the client to avoid hydration mismatch
@@ -103,21 +110,7 @@ export default function Home() {
     if (typeof window !== "undefined") {
       setKeys(generateKeys(length));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [length]);
-
-  const generateKeys = (len: number) => {
-    let lower = "abcdefghijklmnopqrstuvwxyz";
-    let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let number = "0123456789";
-    let characters = lower + upper + number;
-    let generatedKeys = "";
-
-    for (let i = 0; i < len; i++) {
-      generatedKeys += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return generatedKeys;
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white py-12 px-4 sm:px-6 lg:px-8 dark:from-gray-900 dark:to-gray-700">
@@ -160,10 +153,10 @@ export default function Home() {
                 type="range"
                 id="length"
                 value={length}
-                min="1"
-                max="256"
+                min={MIN_KEY_LENGTH}
+                max={MAX_KEY_LENGTH}
                 className="slider w-48"
-                onChange={(e) => setLength(parseInt(e.target.value))}
+                onChange={(e) => setLength(parseInt(e.target.value, 10))}
               />
             </div>
           </div>

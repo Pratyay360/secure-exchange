@@ -40,43 +40,27 @@ export const ROUTES = {
 } as const;
 
 export const TOAST_MESSAGES = {
-  keyGenerated: 'Keys generated successfully!',
-  keyCopied: 'Key copied to clipboard!',
-  linkCopied: 'Link copied to clipboard!',
-  encryptionSuccess: 'Message encrypted successfully!',
-  decryptionSuccess: 'Message decrypted successfully!',
-  encryptionError: 'Encryption failed. Please check your inputs.',
-  decryptionError: 'Decryption failed. Please check your inputs.',
-  invalidKey: 'Invalid key format.',
-  invalidMessage: 'Please enter a message to encrypt.',
-  copyError: 'Failed to copy to clipboard.',
   success: {
     keyGenerated: 'Keys generated successfully!',
-    encryptionSuccess: 'Message encrypted successfully!',
-    decryptionSuccess: 'Message decrypted successfully!'
+    keyCopied: 'Key copied to clipboard!',
+    linkCopied: 'Link copied to clipboard!',
+    encrypted: 'Message encrypted successfully!',
+    decrypted: 'Message decrypted successfully!',
+    copied: 'Copied to clipboard!'
   },
   error: {
     keyGenerationFailed: 'Failed to generate keys. Please try again.',
-    encryptionError: 'Encryption failed. Please check your inputs.',
-    decryptionError: 'Decryption failed. Please check your inputs.',
+    encryptionFailed: 'Encryption failed. Please check your inputs.',
+    decryptionFailed: 'Decryption failed. Please check your inputs.',
     invalidKey: 'Invalid key format.',
-    invalidMessage: 'Please enter a message to encrypt.'
+    invalidMessage: 'Please enter a message to encrypt.',
+    copyFailed: 'Failed to copy to clipboard.'
   }
 } as const;
 
-export const CRYPTO_METHODS = [
-  {
-    title: 'RSA Encryption',
-    description: 'Traditional asymmetric encryption using RSA algorithm',
-    href: ROUTES.encrypt,
-    color: 'bg-blue-100',
-    icon: '🔐'
-  },
-  {
-    title: 'ECC Encryption', 
-    description: 'Modern elliptic curve cryptography for enhanced security',
-    href: ROUTES.eccEncrypt,
-    color: 'bg-green-100',
-    icon: '🔑'
-  }
-] as const;
+export const KEY_GENERATION = {
+  minLength: 1,
+  maxLength: 256,
+  defaultLength: 1,
+  characters: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+} as const;
