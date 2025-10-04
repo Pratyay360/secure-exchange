@@ -1,13 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
-const config = {
+const config: Config = {
   darkMode: "class",
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -52,6 +52,13 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        chart: {
+          "1": "hsl(var(--chart-1))",
+          "2": "hsl(var(--chart-2))",
+          "3": "hsl(var(--chart-3))",
+          "4": "hsl(var(--chart-4))",
+          "5": "hsl(var(--chart-5))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -72,9 +79,21 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        "gradient-primary": "linear-gradient(to right, rgb(37 99 235), rgb(59 130 246), rgb(79 70 229))",
+        "gradient-success": "linear-gradient(to right, rgb(22 163 74), rgb(16 185 129), rgb(20 184 166))",
+        "gradient-warning": "linear-gradient(to right, rgb(234 88 12), rgb(245 158 11), rgb(234 179 8))",
+        "gradient-danger": "linear-gradient(to right, rgb(220 38 38), rgb(244 63 94), rgb(236 72 153))",
+      },
+      transitionProperty: {
+        theme: "background-color, border-color, color, fill, stroke",
+      },
+      transitionDuration: {
+        theme: "200ms",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+};
 
-export default config
+export default config;

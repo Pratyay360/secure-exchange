@@ -41,10 +41,10 @@ export default function EncryptClient() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 py-8 px-4">
+    <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-2xl mx-auto py-12">
         <Card className="shadow-lg bg-card border-border">
-          <CardHeader className="bg-gradient-to-r from-primary to-blue-600 text-white p-6 rounded-t-lg">
+          <CardHeader className="bg-gradient-primary text-white p-6 rounded-t-lg">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
                 <Lock className="w-8 h-8" />

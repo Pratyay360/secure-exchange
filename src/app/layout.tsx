@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter"
@@ -37,18 +37,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <body className={`${inter.className} antialiased bg-background text-foreground`}>
+      <body className={`${inter.className} min-h-screen bg-background text-foreground antialiased transition-colors duration-200`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
+          enableColorScheme={true}
         >
           <Navbar />
           <main className="min-h-[calc(100vh-4rem)]">
             {children}
           </main>
-          <Toaster richColors closeButton position="bottom-right" expand={true} />
+          <Toaster theme="system" richColors closeButton position="bottom-right" expand />
         </ThemeProvider>
       </body>
     </html>

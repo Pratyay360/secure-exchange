@@ -38,7 +38,7 @@ export default function DecryptClient() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-950 dark:via-gray-900 dark:to-purple-950 py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4">
       <div className="w-full max-w-2xl">
         <Card className="shadow-2xl border-2 border-purple-200 dark:border-purple-800">
           <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-8">

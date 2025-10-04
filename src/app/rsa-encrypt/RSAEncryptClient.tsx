@@ -55,10 +55,10 @@ export default function RSAEncryptClient() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-amber-50 dark:from-gray-950 dark:via-gray-900 dark:to-orange-950 py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4">
       <div className="w-full max-w-2xl">
         <Card className="shadow-2xl border-2 border-orange-200 dark:border-orange-800">
-          <CardHeader className="bg-gradient-to-r from-orange-500 to-amber-600 text-white p-8">
+          <CardHeader className="bg-gradient-warning text-white p-8">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
                 <Lock className="w-8 h-8" />

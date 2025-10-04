@@ -17,16 +17,23 @@ export default function EncryptPage() {
 
 function EncryptSkeleton() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950 py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12 px-4">
       <div className="w-full max-w-2xl">
-        <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 animate-pulse">
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-8">
-            <div className="h-8 bg-blue-400 rounded w-1/3 mb-2"></div>
-            <div className="h-4 bg-blue-400 rounded w-2/3"></div>
+        <div className="bg-card shadow-lg rounded-2xl overflow-hidden border border-border animate-pulse">
+          <div className="gradient-primary p-8">
+            <div className="h-8 bg-white/30 rounded-lg w-1/3 mb-2"></div>
+            <div className="h-4 bg-white/20 rounded-lg w-2/3"></div>
           </div>
           <div className="p-8 space-y-6">
-            <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-muted rounded w-1/4"></div>
+              <div className="h-32 bg-muted rounded-lg"></div>
+            </div>
+            <div className="space-y-2">
+              <div className="h-4 bg-muted rounded w-1/4"></div>
+              <div className="h-10 bg-muted rounded-lg"></div>
+            </div>
+            <div className="h-11 bg-muted rounded-lg"></div>
           </div>
         </div>
       </div>

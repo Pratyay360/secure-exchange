@@ -55,10 +55,10 @@ export default function ECCEncryptClient() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-950 dark:via-gray-900 dark:to-green-950 py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background py-12 px-4">
       <div className="w-full max-w-2xl">
         <Card className="shadow-2xl border-2 border-green-200 dark:border-green-800">
-          <CardHeader className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-8">
+          <CardHeader className="bg-gradient-success text-white p-8">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
                 <Shield className="w-8 h-8" />
